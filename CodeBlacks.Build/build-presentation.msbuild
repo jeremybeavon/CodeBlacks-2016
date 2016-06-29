@@ -1,0 +1,73 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ExtensionTasksPath>$(MSBuildThisFileDirectory)..\packages\MSBuild.Extension.Pack.1.8.0\tools\net40\</ExtensionTasksPath>
+    <NewVersionNumber>1.0.$(BuildNumber)</NewVersionNumber>
+  </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)..\packages\MSBuild.Extension.Pack.1.8.0\build\net40\MSBuild.Extension.Pack.targets"/>
+  <ItemGroup>
+    <FabricNamespaces Include="FabricNamespace">
+      <Prefix>fabric</Prefix>
+      <Uri>http://schemas.microsoft.com/2011/01/fabric</Uri>
+    </FabricNamespaces>
+  </ItemGroup>
+	<Target Name="Build">
+    <MSBuild.ExtensionPack.Xml.XmlFile TaskAction="UpdateAttribute"
+                                       Namespaces="@(FabricNamespaces)"
+                                       File="$(MSBuildThisFileDirectory)..\CodeBlacksPresentation\ApplicationPackageRoot\ApplicationManifest.xml"
+                                       XPath="/fabric:ApplicationManifest"
+                                       Key="ApplicationTypeVersion"
+                                       Value="$(NewVersionNumber)"/>
+    <MSBuild.ExtensionPack.Xml.XmlFile TaskAction="UpdateAttribute"
+                                       Namespaces="@(FabricNamespaces)"
+                                       File="$(MSBuildThisFileDirectory)..\CodeBlacksPresentation\ApplicationPackageRoot\ApplicationManifest.xml"
+                                       XPath="/fabric:ApplicationManifest/fabric:ServiceManifestImport/fabric:ServiceManifestRef"
+                                       Key="ServiceManifestVersion"
+                                       Value="$(NewVersionNumber)"/>
+    <MSBuild.ExtensionPack.Xml.XmlFile TaskAction="UpdateAttribute"
+                                       Namespaces="@(FabricNamespaces)"
+                                       File="$(MSBuildThisFileDirectory)..\CodeBlacks.Presentation\PackageRoot\ServiceManifest.xml"
+                                       XPath="/fabric:ServiceManifest"
+                                       Key="Version"
+                                       Value="$(NewVersionNumber)"/>
+    <MSBuild.ExtensionPack.Xml.XmlFile TaskAction="UpdateAttribute"
+                                       Namespaces="@(FabricNamespaces)"
+                                       File="$(MSBuildThisFileDirectory)..\CodeBlacks.Presentation\PackageRoot\ServiceManifest.xml"
+                                       XPath="/fabric:ServiceManifest/fabric:CodePackage"
+                                       Key="Version"
+                                       Value="$(NewVersionNumber)"/>
+    <MSBuild.ExtensionPack.Xml.XmlFile TaskAction="UpdateAttribute"
+                                       Namespaces="@(FabricNamespaces)"
+                                       File="$(MSBuildThisFileDirectory)..\CodeBlacks.Presentation\PackageRoot\ServiceManifest.xml"
+                                       XPath="/fabric:ServiceManifest/fabric:ConfigPackage"
+                                       Key="Version"
+                                       Value="$(NewVersionNumber)"/>
+    <PropertyGroup>
+			<BuildConfiguration>Release</BuildConfiguration>
+			<SolutionProperties>Configuration=$(BuildConfiguration);</SolutionProperties>
+      <SolutionProperties>$(SolutionProperties)Platform=x64;</SolutionProperties>
+			<SolutionProperties>$(SolutionProperties)CreateHardLinksForCopyLocalIfPossible=true;</SolutionProperties>
+			<SolutionProperties>$(SolutionProperties)CreateHardLinksForCopyFilesToOutputDirectoryIfPossible=true;</SolutionProperties>
+			<SolutionProperties>$(SolutionProperties)CreateHardLinksForCopyAdditionalFilesIfPossible=true;</SolutionProperties>
+			<SolutionProperties>$(SolutionProperties)CreateHardLinksForPublishFilesIfPossible=true;</SolutionProperties>
+		</PropertyGroup>
+		<MSBuild Projects="$(MSBuildThisFileDirectory)..\CodeBlacks.sln" Targets="Rebuild" Properties="$(SolutionProperties)" BuildInParallel="true" />
+    <MSBuild Projects="$(MSBuildThisFileDirectory)..\CodeBlacksPresentation\CodeBlacksPresentation.sfproj" Targets="Package" Properties="$(SolutionProperties)" BuildInParallel="true" />
+    <ItemGroup>
+      <PackageFiles Include="$(MSBuildThisFileDirectory)..\CodeBlacksPresentation\pkg\Release\**\*.*" />
+      <PublishFiles Include="$(MSBuildThisFileDirectory)..\CodeBlacksPresentation\ApplicationParameters\Cloud.xml" />
+      <PublishFiles Include="$(MSBuildThisFileDirectory)..\CodeBlacksPresentation\PublishProfiles\Cloud-Staging.xml" />
+      <PublishFiles Include="$(MSBuildThisFileDirectory)..\CodeBlacksPresentation\PublishProfiles\Cloud-Release.xml" />
+      <PublishFiles Include="$(MSBuildThisFileDirectory)..\CodeBlacksPresentation\Scripts\Deploy-FabricApplication.ps1" />
+    </ItemGroup>
+    <MSBuild.ExtensionPack.Compression.Zip TaskAction="Create"
+                                           CompressFiles="@(PackageFiles)"
+                                           ZipFileName="$(MSBuildThisFileDirectory)..\..\ReleasePackage.zip"
+                                           RemoveRoot="$(MSBuildThisFileDirectory)..\CodeBlacksPresentation\pkg\Release"
+                                           Password="C@d3B!ak$"/>
+    <MSBuild.ExtensionPack.Compression.Zip TaskAction="Create"
+                                           CompressFiles="@(PublishFiles)"
+                                           ZipFileName="$(MSBuildThisFileDirectory)..\..\PublishPackage.zip"
+                                           RemoveRoot="$(MSBuildThisFileDirectory)..\CodeBlacksPresentation"
+                                           Password="C@d3B!ak$"/>
+	</Target>
+</Project>

@@ -1,0 +1,17 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ExtensionTasksPath>$(MSBuildThisFileDirectory)packages\MSBuild.Extension.Pack.1.8.0\tools\net40</ExtensionTasksPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)packages\MSBuild.Extension.Pack.1.8.0\build\net40\MSBuild.Extension.Pack.targets"/>
+	<Target Name="Build">
+    <Error Text="Password property is not found." Condition="'$(Password)' == ''" />
+    <MSBuild.ExtensionPack.Compression.Zip TaskAction="Extract"
+                                           ZipFileName="$(MSBuildThisFileDirectory)ReleasePackage.zip"
+                                           ExtractPath="$(MSBuildThisFileDirectory)ReleasePackage"
+                                           Password="$(Password)"/>
+    <MSBuild.ExtensionPack.Compression.Zip TaskAction="Extract"
+                                           ZipFileName="$(MSBuildThisFileDirectory)PublishPackage.zip"
+                                           ExtractPath="$(MSBuildThisFileDirectory)PublishPackage"
+                                           Password="$(Password)"/>
+	</Target>
+</Project>

@@ -1,0 +1,53 @@
+﻿
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+.info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgb(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+    .info h4 {
+        margin: 0 0 5px;
+        color: #777;
+    }
+
+.amt {
+    margin-right: 30px;
+    top: 10px;
+}
+
+.sideLeft {
+    float: left;
+    float: inherit;
+    margin-top: 15px;
+}
+
+
+
+.sideLeft a {
+    font-size: 25;
+}
+
+sideLeft p {
+
+    margin-top: 10px;
+}
+
+.sideRight{
+    float: right;
+}
+
+#listId.active {
+    background-color: rgb(132, 153, 171);
+}
+
+#listId.focus{
+    background-color: rgb(132, 153, 171);
+}

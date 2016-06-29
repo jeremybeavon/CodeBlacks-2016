@@ -1,0 +1,80 @@
+﻿body {
+    background: #8dc63f;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 42px;
+}
+
+.step {
+    display: block;
+    height: 800px;
+    width: 1000px;
+}
+
+h1 {
+    font-size: 60px;
+}
+
+h2 {
+    font-size: 40px;
+    font-weight: normal;
+}
+
+a {
+    color: #fff;
+}
+
+.principals {
+    left: 1500px;
+    position: absolute;
+    width: 800px;
+}
+
+.step.diagram.future {
+    opacity: 0;
+}
+
+.step.diagram.present {
+    transition: opacity 1s ease-out;
+    opacity: 1;
+}
+
+.step.past {
+    transition: opacity 2s ease-out;
+    opacity: 0; 
+}
+
+.step.present {
+    opacity: 1; 
+}
+
+.step.present .principals li {
+    transform: translateX(-1500px);
+    transition: 0.2s;
+}
+
+.impress-on-step-1 .step.hide-on-initial-axis, .impress-on-step-2 .step.hide-on-initial-axis {
+    opacity: 0;
+}
+
+.impress-on-step-2 .step.hide-on-initial-axis {
+    transition: opacity;
+    transition-delay: 1s;
+    opacity: 0;
+}
+
+.step.present .principals li.principal-2 {
+    transition-delay: 0.1s;
+}
+
+.step.present .principals li.principal-3 {
+    transition-delay: 0.2s;
+}
+
+.step.present .principals li.principal-4 {
+    transition-delay: 0.3s;
+}
+
+.step.present .principals li.principal-5 {
+    transition-delay: 0.4s;
+}
